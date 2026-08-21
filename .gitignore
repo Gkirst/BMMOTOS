@@ -1,0 +1,31 @@
+﻿# Ambiente Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+
+# Dados locais e arquivos temporários do Excel
+*.bak
+*.tmp
+~$*.xlsx
+BM_MOTOS_Gestao_Estoque_Caixa.xlsx
+
+# Testes e ferramentas
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
