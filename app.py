@@ -3,14 +3,33 @@ import pandas as pd
 from openpyxl import load_workbook
 from datetime import datetime
 import unicodedata
+import shutil
+import os
+
+ARQUIVO_EXCEL = "BM_MOTOS_Gestao_Estoque_Caixa.xlsx"
+TEMPLATE_EXCEL = "BM_MOTOS_Gestao_Estoque_Caixa_Template.xlsx"
+
+# Se o arquivo original não existir (como acontece no GitHub/Streamlit Cloud),
+# cria uma cópia a partir do template para o app poder rodar.
+if not os.path.exists(ARQUIVO_EXCEL):
+    if os.path.exists(TEMPLATE_EXCEL):
+        shutil.copy(TEMPLATE_EXCEL, ARQUIVO_EXCEL)
+    else:
+        st.error("Erro: Nem a planilha original nem o template foram encontrados.")
+        st.stop()
+
 
 
 # ============================================================
 # CONFIGURAÇÕES GERAIS
 # ============================================================
 
-ARQUIVO_EXCEL = "BM_MOTOS_Gestao_Estoque_Caixa.xlsx"
-SENHA_ADMIN = ""
+
+try:
+    SENHA_ADMIN = str(st.secrets["SENHA_ADMIN"]).strip()
+except Exception:
+    SENHA_ADMIN = os.getenv("SENHA_ADMIN", "").strip()
+
 
 st.set_page_config(
     page_title="BM MOTOS",
