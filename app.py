@@ -5,6 +5,9 @@ from datetime import datetime
 import unicodedata
 import shutil
 import os
+import hashlib
+import hmac
+import secrets
 
 ARQUIVO_EXCEL = "BM_MOTOS_Gestao_Estoque_Caixa.xlsx"
 TEMPLATE_EXCEL = "BM_MOTOS_Gestao_Estoque_Caixa_Template.xlsx"
@@ -236,12 +239,40 @@ def cadastrar_novo_produto(nome, categoria, preco_custo, preco_venda, quantidade
 # LOGIN
 # ============================================================
 
+def gerar_hash_senha(senha, salt=None, iteracoes=200_000):
+    """Gera um hash PBKDF2 com salt para armazenar senhas sem texto aberto."""
+    senha_bytes = str(senha).encode("utf-8")
+    salt = salt or secrets.token_hex(16)
+    hash_bytes = hashlib.pbkdf2_hmac(
+        "sha256", senha_bytes, salt.encode("utf-8"), iteracoes
+    )
+    return f"pbkdf2_sha256${iteracoes}${salt}${hash_bytes.hex()}"
+
+
+def verificar_hash_senha(senha_digitada, senha_armazenada):
+    """Compara uma senha digitada com o hash PBKDF2 armazenado na planilha."""
+    try:
+        algoritmo, iteracoes_texto, salt, hash_esperado = str(senha_armazenada).strip().split("$", 3)
+        if algoritmo != "pbkdf2_sha256":
+            return False
+        iteracoes = int(iteracoes_texto)
+        hash_calculado = hashlib.pbkdf2_hmac(
+            "sha256",
+            str(senha_digitada).encode("utf-8"),
+            salt.encode("utf-8"),
+            iteracoes,
+        ).hex()
+        return hmac.compare_digest(hash_calculado, hash_esperado)
+    except (TypeError, ValueError):
+        return False
+
+
 def fazer_login_mecanico(nome_selecionado, senha_digitada, df_mecanicos):
     linha = df_mecanicos[df_mecanicos["Nome"] == nome_selecionado]
     if linha.empty:
         return False
-    senha_correta = str(linha.iloc[0]["Senha"]).strip()
-    return str(senha_digitada).strip() == senha_correta
+    senha_armazenada = linha.iloc[0]["Senha"]
+    return verificar_hash_senha(senha_digitada, senha_armazenada)
 
 def fazer_login_admin(senha):
     return str(senha).strip() == SENHA_ADMIN
