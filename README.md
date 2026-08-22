@@ -28,9 +28,17 @@ Este projeto é um protótipo de uso local. Ele ainda não deve ser tratado como
 ### Instalação
 
 ```powershell
-git clone [https://github.com/Gkirst/BMMOTOS.git](https://github.com/Gkirst/BMMOTOS.git)
+git clone https://github.com/Gkirst/BMMOTOS.git
 cd BMMOTOS
 python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
-New-Item -Path .env -Value "SENHA_ADMIN=sua_senha_aqui"
+$env:SENHA_ADMIN = "sua_senha_aqui"
+streamlit run app.py
+```
+
+No Streamlit Cloud, configure `SENHA_ADMIN` em **Settings > Secrets** antes de executar o aplicativo.
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter mais informações.

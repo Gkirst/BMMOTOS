@@ -405,7 +405,7 @@ with aba_venda:
     st.markdown("#### 🔍 Pesquisar Peças")
     termo_busca = st.text_input(
         "Digite o nome da peça",
-        placeholder="Ex: oleo, filtro, vela, freio...",
+        placeholder="Ex.: óleo, filtro, vela, freio...",
         help="Não precisa usar acentos! Resultados aparecem automaticamente",
         key="busca_venda",
         on_change=None
@@ -540,7 +540,7 @@ if st.session_state.nivel_acesso == "admin":
         tab_existente, tab_novo = st.tabs(["➕ Produto Existente", "🆕 Produto Novo"])
 
         with tab_existente:
-            b_usuario = st.text_input("Pesquisar produto", placeholder="Ex: oleo, filtro...", key="busca_estoque_entrada")
+            b_usuario = st.text_input("Pesquisar produto", placeholder="Ex.: óleo, filtro...", key="busca_estoque_entrada")
             if b_usuario:
                 t = remover_acentos(b_usuario)
                 filtro = df_produtos["Nome"].apply(lambda x: t in remover_acentos(x))
