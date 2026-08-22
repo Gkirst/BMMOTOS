@@ -9,7 +9,6 @@ __pycache__/
 # Segredos e configurações locais
 .env
 .env.*
-!.env.example
 
 # Dados locais e arquivos temporários do Excel
 *.bak

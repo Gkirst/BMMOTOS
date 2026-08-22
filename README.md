@@ -33,4 +33,4 @@ cd BMMOTOS
 python -m venv .venv
 .\.venv\Scripts\activate
 pip install -r requirements.txt
-Copy-Item .env.example .env
+New-Item -Path .env -Value "SENHA_ADMIN=sua_senha_aqui"
